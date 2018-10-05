@@ -2,10 +2,10 @@
 include_once 'configuration.php';
 include_once 'class/database.php';
 include_once 'lang/FR_fr.php';
-include_once 'model/users.php';
-include_once 'model/service.php';
+include_once 'model/martialStatut.php';
+include_once 'model/customers.php';
 include_once 'helpers/form.php';
-include_once 'controlleur/addUsersControlleur.php';
+include_once 'controlleur/addCustomersControlleur.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -20,32 +20,32 @@ include_once 'controlleur/addUsersControlleur.php';
         <!-- feuille de style de la page -->
         <link href="assets/CSS/style.css" rel="stylesheet" type="text/css"/>
         <meta charset="UTF-8">
-        <title><?= ADD_USER ?></title>
+        <title><?= ADD_CLIENT ?></title>
     </head>
     <body>
         <?php include_once 'header.php'; ?>
         <div class="container">
-            <h1><?= $errorList == 0 ? $succesAddUser : $errorAddUser ?></h1>
-            <form method="post" action='addUsers.php'>
+            <h1><?= $errorList == 0 ? $succesAddCustomer : $errorAddCustomer ?></h1>
+            <form method="post" action='addCustomers.php'>
                 <fieldset>
                     <div class="row">
                         <div class="form-group col-sm-12 col-md-6 col-xs-12 col-lg-6">
                             <label for="lastName"><?= LAST_NAME ?></label>
-                            <input class="form-control <?= isset($errorList['lastName']) ? 'is-invalid' : '' ?>" name="lastName" placeholder="<?= LAST_NAME ?>" type="text" <?= REQUIRED ?> value="<?= $users->lastName ?>">
+                            <input class="form-control <?= isset($errorList['lastName']) ? 'is-invalid' : '' ?>" name="lastName" placeholder="<?= LAST_NAME ?>" type="text" <?= REQUIRED ?> value="<?= $customers->lastName ?>">
                             <p class="help-block"><?= isset($errorList['lastName']) ? $errorList['lastName'] : '' ?></p>
                         </div>
                         <div class="form-group col-sm-12 col-md-6 col-xs-12 col-lg-6">
                             <label for="firstName"><?= FIRST_NAME ?></label>
-                            <input class="form-control <?= isset($errorList['firstName']) ? 'is-invalid' : '' ?>" name="firstName" placeholder="<?= FIRST_NAME ?>" type="text" <?= REQUIRED ?> value="<?= $users->firstName ?>">
+                            <input class="form-control <?= isset($errorList['firstName']) ? 'is-invalid' : '' ?>" name="firstName" placeholder="<?= FIRST_NAME ?>" type="text" <?= REQUIRED ?> value="<?= $customers->firstName ?>">
                             <p class="help-block"><?= isset($errorList['firstName']) ? $errorList['firstName'] : '' ?></p>
                         </div>
                         <div class="form-group col-sm-12 col-md-6 col-xs-12 col-lg-6">
-                            <label for="serviceGroup"><?= SERVICE_GROUP ?></label>
-                            <select class="custom-select" name="serviceGroup">
+                            <label for="martialStatut"><?= MARTIAL_STATUT ?></label>
+                            <select class="custom-select" name="martialStatut">
                                 <?php
-                                foreach ($groupService as $groupServices) {
+                                foreach ($getListMartialStatut as $getListMartialStatuts) {
                                     ?>
-                                    <option value="<?= $groupServices->id ?>" <?= $service->nameService == '' ? '' : 'selected'?>><?= $groupServices->nameService ?></option>
+                                    <option value="<?= $getListMartialStatuts->id ?>" <?= $getListMartialStatuts->statut == '' ? '' : 'selected'?>><?= $getListMartialStatuts->statut ?></option>
                                     <?php
                                 }
                                 ?>
@@ -53,13 +53,13 @@ include_once 'controlleur/addUsersControlleur.php';
                         </div>
                         <div class="form-group col-sm-12 col-md-6 col-xs-12 col-lg-6">
                             <label for="birthDate"><?= BIRTHDATE ?></label>
-                            <input id="date-mask" data-provide="datepicker" class="form-control datepicker <?= isset($errorList['birthDate']) ? 'is-invalid' : '' ?>" id="birthDate" name="birthDate" placeholder="<?= BIRTHDATE ?>" type="text" data-mask="99/99/9999" <?= REQUIRED ?> value="<?= $users->birthdate ?>">
+                            <input id="date-mask" data-provide="datepicker" class="form-control datepicker <?= isset($errorList['birthDate']) ? 'is-invalid' : '' ?>" id="birthDate" name="birthDate" placeholder="<?= BIRTHDATE ?>" type="text" data-mask="99/99/9999" <?= REQUIRED ?> value="<?= $customers->birthdate ?>">
                             <p class="help-block"><?= isset($errorList['birthDate']) ? $errorList['birthDate'] : '' ?></p>
                         </div>
                         <div class="form-group col-sm-12 col-md-6 col-xs-12 col-lg-6">
-                            <label for="adress"><?= ADRESS ?></label>
-                            <input class="form-control <?= isset($errorList['adress']) ? 'is-invalid' : '' ?>" name="adress" placeholder="<?= ADRESS ?>" type="text" <?= REQUIRED ?> value="<?= $contentAdress ?>">
-                            <p class="help-block"><?= isset($errorList['adress']) ? $errorList['adress'] : '' ?></p>
+                            <label for="address"><?= ADDRESS ?></label>
+                            <input class="form-control <?= isset($errorList['address']) ? 'is-invalid' : '' ?>" name="address" placeholder="<?= ADDRESS ?>" type="text" <?= REQUIRED ?> value="<?= $contentAddress ?>">
+                            <p class="help-block"><?= isset($errorList['address']) ? $errorList['address'] : '' ?></p>
                         </div>
                         <div class="form-group col-sm-12 col-md-6 col-xs-12 col-lg-6">
                             <label for="city"><?= CITY ?></label>
@@ -68,12 +68,12 @@ include_once 'controlleur/addUsersControlleur.php';
                         </div>
                         <div class="form-group col-sm-12 col-md-6 col-xs-12 col-lg-6">
                             <label for="postalCode"><?= POSTAL_CODE ?></label>
-                            <input class="form-control <?= isset($errorList['postalCode']) ? 'is-invalid' : '' ?>" name="postalCode" placeholder="<?= POSTAL_CODE ?>" type="text" <?= REQUIRED ?> value="<?= $users->postalCode ?>">
+                            <input class="form-control <?= isset($errorList['postalCode']) ? 'is-invalid' : '' ?>" name="postalCode" placeholder="<?= POSTAL_CODE ?>" type="text" <?= REQUIRED ?> value="<?= $customers->postalCode ?>">
                             <p class="help-block"><?= isset($errorList['postalCode']) ? $errorList['postalCode'] : '' ?></p>
                         </div>
                         <div class="form-group col-sm-12 col-md-6 col-xs-12 col-lg-6">
                             <label for="phoneNumber"><?= PHONE_NUMBER ?></label>
-                            <input class="form-control <?= isset($errorList['phoneNumber']) ? 'is-invalid' : '' ?>" name="phoneNumber" placeholder="<?= PHONE_NUMBER ?>" type="text" data-mask="09.99.99.99.99" <?= REQUIRED ?> value="<?= $users->phoneNumber ?>">
+                            <input class="form-control <?= isset($errorList['phoneNumber']) ? 'is-invalid' : '' ?>" name="phoneNumber" placeholder="<?= PHONE_NUMBER ?>" data-mask="09.99.99.99.99" type="text" <?= REQUIRED ?> value="">
                             <p class="help-block"><?= isset($errorList['phoneNumber']) ? $errorList['phoneNumber'] : '' ?></p>
                         </div>
                     </div>

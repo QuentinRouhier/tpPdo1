@@ -20,6 +20,7 @@ class users extends database {
     public $postalCode = '';
     public $phoneNumber = '';
     public $id_tpPdo1_service = 0;
+    public $nameService = '';
 
     /**
      * Déclaration de la méthode magique construct.
@@ -48,26 +49,32 @@ class users extends database {
         return $queryResult->execute();
     }
 
-    public function showUsers() {
-        $query = 'SELECT `tpPdo1_users`.`id` AS `idUser`,`tpPdo1_users`.`lastName`, `tpPdo1_users`.`firstName`, '
-                . 'floor(DATEDIFF(CURRENT_DATE,`birthdate`)/365.25) AS `birthdate`, '
-                . '`tpPdo1_users`.`adress`, `tpPdo1_users`.`postalCode`, '
-                . '`tpPdo1_users`.`phoneNumber`, `tpPdo1_users`.`id_tpPdo1_service`, '
-                . '`tpPdo1_service`.`id`,  `tpPdo1_service`.`nameService`'
-                . 'FROM `tpPdo1_users` '
-                . 'INNER JOIN `tpPdo1_service` '
-                . 'ON `tpPdo1_users`.`id_tpPdo1_service` = `tpPdo1_service` . `id` ';
-        $queryResult = $this->pdo->prepare($query);
-        $queryResult->execute();
-        return $queryResult->fetchAll(PDO::FETCH_OBJ);
-    }
-
     public function deleteUsers() {
         $query = 'DELETE FROM `tpPdo1_users`'
                 . 'WHERE `id` = :id';
         $queryResult = $this->pdo->prepare($query);
         $queryResult->bindValue(':id', $this->id, PDO::PARAM_INT);
         return $queryResult->execute();
+    }
+
+    public function getUserListByService() {
+        $query = 'SELECT `tpPdo1_users`.`id` AS idUser, `lastName`, `firstName`,YEAR(CURDATE())-YEAR(`birthdate`)AS `age`, `adress`, `postalCode`, `nameService`, `phoneNumber`  '
+                . 'FROM `tpPdo1_users` '
+                . 'INNER JOIN `tpPdo1_service` '
+                . 'ON `tpPdo1_users` . `id_tpPdo1_service` = `tpPdo1_service` . `id` ';
+        $where = '';
+        $result = array();
+        if ($this->nameService != '') {
+            $where = 'WHERE `tpPdo1_service` . `id` = :id_tpPdo1_service';
+        }
+        $req = $this->pdo->prepare($query . $where);
+        if ($this->nameService != '') {
+            $req->bindValue(':id_tpPdo1_service', $this->id_tpPdo1_service, PDO::PARAM_INT);
+        }
+        if ($req->execute()) {
+            $result = $req->fetchAll(PDO::FETCH_OBJ);
+        }
+        return $result;
     }
 
 }

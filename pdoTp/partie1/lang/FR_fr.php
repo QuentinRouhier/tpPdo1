@@ -15,14 +15,21 @@ define('ADD','Valider');
 define('REQUIRED','required');
 define('DELETE_USERS','Supprimer');
 define('YEAR',' ans');
+define('FILTER','Filtrer les services');
+define('ALL_SERVICE','Tout les services');
 
 // message d'erreurs
 define('EMPTY_VALUE','Veuillez remplir le champs');
 define('ERROR_NAME','Le nom saisi est incorrect veuillez ne pas mettre des caractéres speciaux comme des virgules ainsi que des chiffres');
-define('ERROR_ADRESS','L\'adresse saisie est incorrect elle eput etre trop longue');
-define('ERROR_CITY','la ville saisi est saisie est incorrect elle peut etre trop longue');
+define('ERROR_ADRESS','L\'adresse saisie est incorrect elle eput etre trop longue ou trop courte');
+define('ERROR_CITY','la ville saisi est saisie est incorrect elle peut etre trop longue ou trop courte');
 define('ERROR_BIRTH_DAY','veuilez respecter la sintaxe suivante XX/XX/XXXX et mettre une vrai date');
 define('ERROR_POSTAL_CODE','Le code postal indiqué est incorrect veuillez respecter la sintaxe suivante XXXXX');
 define('ERROR_PHONE_NUMBER','Le numéros indiqué  est incorrect veuillez respecter la sintaxe suivante 0X.XX.XX.XX.XX');
 define('ERROR_ADD_USER','Une erreur est surevenu veuillez remplir correctement les champs');
 define('SUCCES_ADD_USER','l\'utilisateur a bien etait enregistré');
+
+// <thead>
+define('NAME','Nom Prenom');
+define('YEARS','Age');
+define('ADDRESS','Adresse');
